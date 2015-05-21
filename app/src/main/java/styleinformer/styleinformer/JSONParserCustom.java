@@ -11,8 +11,9 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -24,28 +25,19 @@ import java.util.List;
 /**
  * Created by alexander.kluev on 14.05.2015.
  */
-public class JSONParser {
+public class JSONParserCustom {
 
     static InputStream is = null;
-    static JSONObject jObj = null;
+    static org.json.simple.JSONObject jObj = null;
     static String json = "";
 
-    // конструктор
-    public JSONParser() {
+    public JSONParserCustom() {
 
     }
 
-    /**
-     * Получить ответ по ссылке в формате json
-     * @param url запрашиваемая страница
-     * @param method GET or POST
-     * @param params параметры, которые необходимо передать
-     * @return
-     */
     public JSONObject makeHttpRequest(String url, String method,
                                       List<NameValuePair> params) {
 
-        // создаём HTTP запрос
         try {
 
 
@@ -91,19 +83,25 @@ public class JSONParser {
             Log.e("Buffer Error", "Error converting result " + e.toString());
         }
 
-
-        // пробуем распарсит JSON объект
         try {
             int nPos = json.indexOf("[");
             int lPos = json.lastIndexOf("]");
             json = json.substring(nPos,lPos+1);
 
-            jObj = new JSONObject(json);
-        } catch (JSONException e) {
+            JSONParser parser = new JSONParser();
+
+            Object obj = null;
+
+            obj = parser.parse(json);
+
+            JSONObject jsonObj = (JSONObject) obj;
+
+            return jsonObj;
+
+        } catch (ParseException e) {
             Log.e("JSON Parser", "Error parsing data " + e.toString());
         }
 
-
-        return jObj;
+        return null;
     }
 }

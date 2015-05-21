@@ -1,31 +1,15 @@
 package styleinformer.styleinformer;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import styleinformer.styleinformer.JSONParser;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.utils.URLEncodedUtils;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static java.util.Arrays.asList;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -47,24 +31,34 @@ public class MainActivity extends ActionBarActivity {
         Thread thread = new Thread(new Runnable(){
             @Override
             public void run() {
-                try {
-                    JSONParser jParse = new JSONParser();
+
+                    JSONParserCustom jParse = new JSONParserCustom();
                     List<NameValuePair> params = new ArrayList<NameValuePair>();
                     params.add(new BasicNameValuePair("uid", "1"));
 
-                    JSONObject jObj = jParse.makeHttpRequest("http://styleinformer.ru/post-api/", "GET", params);
+                    org.json.simple.JSONObject jObj = jParse.makeHttpRequest("http://styleinformer.ru/post-api/", "GET", params);
+
+                    /*ExpandableListView listView = (ExpandableListView)findViewById(R.id.expandableListView);
 
 
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                    ArrayList<ArrayList<String>> groups = new ArrayList<ArrayList<String>>();
+
+
+                    for(int i=0;i<jObj.size();i++)
+                    {
+                        ArrayList<String> children = new ArrayList<String>();
+
+                        children.add(jObj[i].);
+                        groups.add(children);
+                    }
+                //Создаем адаптер и передаем context и список с данными
+                ExpListAdapter adapter = new ExpListAdapter(getApplicationContext(), groups);
+                listView.setAdapter(adapter);*/
             }
         });
 
         thread.start();
-
-
-
+        int i = 0;
     }
 
     @Override
